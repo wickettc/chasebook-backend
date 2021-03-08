@@ -5,6 +5,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+require('./passport/passport');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 

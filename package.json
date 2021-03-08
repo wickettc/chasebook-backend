@@ -9,12 +9,15 @@
         "winstart": "SET DEBUG=chasebook-backend:* & npm run nodemon-start"
     },
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "cookie-parser": "~1.4.4",
         "debug": "~2.6.9",
         "dotenv": "^8.2.0",
         "express": "~4.16.1",
         "mongoose": "^5.11.19",
-        "morgan": "~1.9.1"
+        "morgan": "~1.9.1",
+        "passport": "^0.4.1",
+        "passport-jwt": "^4.0.0"
     },
     "devDependencies": {
         "eslint": "^7.2.0",
