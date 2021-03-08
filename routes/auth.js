@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const userController = require('../controllers/authController');
+const router = express.Router();
+require('dotenv').config();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post('/login', userController.login_post);
+
+router.post('/signup', userController.signup_post);
 
 module.exports = router;
