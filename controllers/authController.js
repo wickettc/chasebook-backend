@@ -52,15 +52,16 @@ exports.signup_post = [
         }
 
         bcrypt.hash(req.body.password, 10, (error, hashedPW) => {
-            new User({
+            const newUser = new User({
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
                 email: req.body.email,
                 password: hashedPW,
-            }).save((err) => {
+            });
+            newUser.save((err) => {
                 if (err) return next(err);
                 ////////////// do something here when successful
-                res.json({ msg: 'Signup Successful' });
+                res.json({ msg: 'Signup Successful', newUser });
             });
         });
     },
