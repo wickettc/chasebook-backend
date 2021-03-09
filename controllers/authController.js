@@ -25,21 +25,19 @@ exports.signup_post = [
         .isLength({ min: 1 })
         .withMessage('First name is required'),
     body('lastname').isLength({ min: 1 }).withMessage('Last name is required'),
-    body('username').custom((value) =>
-        User.findOne({ username: value })
+    body('email').custom((value) =>
+        User.findOne({ email: value })
             .exec()
             .then((user) => {
                 if (user) {
-                    return Promise.reject(
-                        new Error('Username is already in use')
-                    );
+                    return Promise.reject(new Error('Email is already in use'));
                 }
             })
     ),
     body('password')
         .isLength({ min: 8 })
         .withMessage('Password must contain at least 8 characters'),
-    body('passwordconfirm').custom((value, { req }) => {
+    body('confirmpassword').custom((value, { req }) => {
         if (value !== req.body.password) {
             throw new Error('Password confirmation does not match');
         }
@@ -57,7 +55,7 @@ exports.signup_post = [
             new User({
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
-                username: req.body.username,
+                email: req.body.email,
                 password: hashedPW,
             }).save((err) => {
                 if (err) return next(err);

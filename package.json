@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node ./bin/www",
         "nodemon-start": "nodemon ./bin/www",
-        "dev": "DEBUG=chasebook-backend:* npm nodemon-start",
+        "dev": "DEBUG=chasebook-backend:* npm run nodemon-start",
         "winstart": "SET DEBUG=chasebook-backend:* & npm run nodemon-start"
     },
     "dependencies": {

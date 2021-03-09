@@ -10,22 +10,25 @@ const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
 passport.use(
-    new LocalStrategy((username, password, done) => {
-        User.findOne({ username }, (err, user) => {
-            if (err) return done(err);
-            // email does not exist
-            if (!user) return done(null, false, { msg: 'Incorrect Email' });
-            // need to check if password is correct here
-            bcrypt.compare(password, user.password, (error, res) => {
-                if (res) {
-                    // passwords match
-                    return done(null, user);
-                }
-                // passwords do not match
-                return done(null, false, { msg: 'Incorrect Password' });
+    new LocalStrategy(
+        { usernameField: 'email', passwordField: 'password' },
+        (username, password, done) => {
+            User.findOne({ email: username }, (err, user) => {
+                if (err) return done(err);
+                // email does not exist
+                if (!user) return done(null, false, { msg: 'Incorrect Email' });
+                // need to check if password is correct here
+                bcrypt.compare(password, user.password, (error, res) => {
+                    if (res) {
+                        // passwords match
+                        return done(null, user);
+                    }
+                    // passwords do not match
+                    return done(null, false, { msg: 'Incorrect Password' });
+                });
             });
-        });
-    })
+        }
+    )
 );
 
 passport.use(
@@ -37,7 +40,7 @@ passport.use(
 
         async (token, done) => {
             try {
-                return done(null, token.user);
+                return done(null, token);
             } catch (err) {
                 done(err);
             }
