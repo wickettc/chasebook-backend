@@ -1,7 +1,6 @@
 const express = require('express');
 const userController = require('../controllers/authController');
 const router = express.Router();
-require('dotenv').config();
 
 router.post('/login', userController.login_post);
 
