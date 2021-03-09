@@ -47,8 +47,8 @@ exports.signup_post = [
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             //////// return errors here
-            // res.render('sign_up', { errors: errors.array() });
-            // return;
+            res.json({ errors: errors.array() });
+            return;
         }
 
         bcrypt.hash(req.body.password, 10, (error, hashedPW) => {
@@ -60,7 +60,7 @@ exports.signup_post = [
             }).save((err) => {
                 if (err) return next(err);
                 ////////////// do something here when successful
-                // res.redirect('/');
+                res.json({ msg: 'Signup Successful' });
             });
         });
     },
