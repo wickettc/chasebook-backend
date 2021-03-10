@@ -32,10 +32,6 @@ exports.post_create = async (req, res, next) => {
         const newPost = new Post({
             body,
             author,
-            meta: {
-                likes: 0,
-                comments: 0,
-            },
         });
         const post = await newPost.save();
         if (!post) throw new Error('Post could not be created');

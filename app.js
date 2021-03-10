@@ -9,9 +9,11 @@ require('dotenv').config();
 
 require('./passport/passport');
 const indexRouter = require('./routes/index');
+const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const commentRouter = require('./routes/comment');
+const likeRouter = require('./routes/like');
 
 const app = express();
 
@@ -32,11 +34,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/user', passport.authenticate('jwt', { session: false }), userRouter);
 app.use('/post', passport.authenticate('jwt', { session: false }), postRouter);
 app.use(
     '/comment',
     passport.authenticate('jwt', { session: false }),
     commentRouter
 );
+app.use('/like', passport.authenticate('jwt', { session: false }), likeRouter);
 
 module.exports = app;
