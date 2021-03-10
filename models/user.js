@@ -11,4 +11,8 @@ const userSchema = new Schema({
     friends: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
 });
 
+userSchema.virtual('fullname').get(() => {
+    return `${this.firstname} ${this.lastname}`;
+});
+
 module.exports = mongoose.model('User', userSchema);

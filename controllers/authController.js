@@ -25,15 +25,20 @@ exports.signup_post = [
         .isLength({ min: 1 })
         .withMessage('First name is required'),
     body('lastname').isLength({ min: 1 }).withMessage('Last name is required'),
-    body('email').custom((value) =>
-        User.findOne({ email: value })
-            .exec()
-            .then((user) => {
-                if (user) {
-                    return Promise.reject(new Error('Email is already in use'));
-                }
-            })
-    ),
+    body('email')
+        .isEmail()
+        .normalizeEmail()
+        .custom((value) =>
+            User.findOne({ email: value })
+                .exec()
+                .then((user) => {
+                    if (user) {
+                        return Promise.reject(
+                            new Error('Email is already in use')
+                        );
+                    }
+                })
+        ),
     body('password')
         .isLength({ min: 8 })
         .withMessage('Password must contain at least 8 characters'),
@@ -46,7 +51,6 @@ exports.signup_post = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            //////// return errors here
             res.json({ errors: errors.array() });
             return;
         }
@@ -60,7 +64,6 @@ exports.signup_post = [
             });
             newUser.save((err) => {
                 if (err) return next(err);
-                ////////////// do something here when successful
                 res.json({ msg: 'Signup Successful', newUser });
             });
         });
