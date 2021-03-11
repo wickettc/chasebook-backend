@@ -23,7 +23,7 @@ exports.post_like = async (req, res, next) => {
             }
         );
         if (!refPost) throw new Error('Like could not be added to post');
-        res.status(204).json({ like, refPost });
+        res.status(200).json({ like, refPost });
     } catch (err) {
         next(err);
     }
