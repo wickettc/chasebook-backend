@@ -3,8 +3,6 @@ const Post = require('../models/post');
 
 exports.post_like = async (req, res, next) => {
     try {
-        // probably use async call here to create new like and
-        // also push like ID onto post.meta.like array
         const { forpostID, author } = req.body;
         const newLike = new Like({
             forpostID,
@@ -12,11 +10,9 @@ exports.post_like = async (req, res, next) => {
         });
         const like = await newLike.save();
         if (!like) throw new Error('Like could not be created');
-        let update = { $push: { likes: like._id } };
-        // find post like refers to and add like to meta.likes
-        const refPost = await Post.findByIdAndUpdate(
-            forpostID,
-            update,
+        const refPost = await Post.findOneAndUpdate(
+            { _id: forpostID },
+            { $addToSet: { likes: like._id } },
             { new: true },
             (err) => {
                 if (err) next(err);
@@ -24,6 +20,31 @@ exports.post_like = async (req, res, next) => {
         );
         if (!refPost) throw new Error('Like could not be added to post');
         res.status(200).json({ like, refPost });
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.post_unlike = async (req, res, next) => {
+    try {
+        console.log(req.body.id);
+        const removedLike = await Like.findByIdAndDelete(req.body.id, (err) => {
+            if (err) next(err);
+        });
+        // const removedLikeFromPost = await Post.findOneAndUpdate(
+        //     req.body.postID,
+        //     {
+        //         $pull: { likes: req.body.id },
+        //     },
+        //     { new: true },
+        //     (err) => {
+        //         if (err) next(err);
+        //     }
+        // );
+        if (!removedLike) throw new Error('Like could not be deleted');
+        // if (!removedLikeFromPost)
+        //     throw new Error('Like could not be removed from post');
+        res.status(204).json({ removedLike });
     } catch (err) {
         next(err);
     }

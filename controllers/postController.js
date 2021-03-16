@@ -6,8 +6,8 @@ exports.posts_get = async (req, res, next) => {
     try {
         const posts = await Post.find({})
             .populate('author', '-password')
-            .populate('likes')
-            .populate('comments');
+            .populate('likes');
+        // .populate('comments');
         if (!posts.length) throw new Error('No posts found');
         res.status(200).json(posts);
     } catch (err) {
