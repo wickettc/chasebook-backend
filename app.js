@@ -43,4 +43,10 @@ app.use(
 );
 app.use('/like', passport.authenticate('jwt', { session: false }), likeRouter);
 
+// error handler
+app.use((err, req, res, next) => {
+    const { status = 500, message = 'Something went wrong' } = err;
+    res.status(status).json(message);
+});
+
 module.exports = app;

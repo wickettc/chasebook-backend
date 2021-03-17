@@ -27,13 +27,8 @@ exports.post_like = async (req, res, next) => {
 
 exports.post_unlike = async (req, res, next) => {
     try {
-        console.log(req.params.id);
-        const removedLike = await Like.findByIdAndDelete(
-            req.params.id,
-            (err) => {
-                if (err) next(err);
-            }
-        );
+        const removedLike = await Like.findByIdAndRemove(req.params.id);
+        console.log(removedLike);
         if (!removedLike) throw new Error('Like could not be deleted');
         res.status(204).json({ removedLike });
     } catch (err) {
