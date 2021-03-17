@@ -27,23 +27,14 @@ exports.post_like = async (req, res, next) => {
 
 exports.post_unlike = async (req, res, next) => {
     try {
-        console.log(req.body.id);
-        const removedLike = await Like.findByIdAndDelete(req.body.id, (err) => {
-            if (err) next(err);
-        });
-        // const removedLikeFromPost = await Post.findOneAndUpdate(
-        //     req.body.postID,
-        //     {
-        //         $pull: { likes: req.body.id },
-        //     },
-        //     { new: true },
-        //     (err) => {
-        //         if (err) next(err);
-        //     }
-        // );
+        console.log(req.params.id);
+        const removedLike = await Like.findByIdAndDelete(
+            req.params.id,
+            (err) => {
+                if (err) next(err);
+            }
+        );
         if (!removedLike) throw new Error('Like could not be deleted');
-        // if (!removedLikeFromPost)
-        //     throw new Error('Like could not be removed from post');
         res.status(204).json({ removedLike });
     } catch (err) {
         next(err);
