@@ -9,6 +9,7 @@ const userSchema = new Schema({
     lastname: { type: String, required: true },
     date: { type: Date, default: Date.now },
     friends: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+    friendrequests: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
 });
 
 userSchema.virtual('fullname').get(() => {
