@@ -4,6 +4,10 @@ const router = express.Router();
 
 router.get('/:id', userController.get_user);
 
-router.post('/addrequest', userController.add_friend);
+router.post('/sendrequest', userController.send_request);
+
+router.put('/acceptrequest', userController.accept_request);
+
+router.put('/denyrequest', userController.deny_request);
 
 module.exports = router;

@@ -13,7 +13,7 @@ exports.get_user = async (req, res, next) => {
     }
 };
 
-exports.add_friend = async (req, res, next) => {
+exports.send_request = async (req, res, next) => {
     try {
         const { curUserID, reqUserID } = req.body;
         const friendRequest = await User.findByIdAndUpdate(
@@ -26,6 +26,61 @@ exports.add_friend = async (req, res, next) => {
         );
         if (!friendRequest) throw new Error('Friend Request could not be sent');
         res.status(200).json(friendRequest);
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.accept_request = async (req, res, next) => {
+    try {
+        const { curUserID, reqUserID } = req.body;
+        const acceptRequest = await User.findByIdAndUpdate(
+            curUserID,
+            { $pull: { friendrequests: reqUserID } },
+            { new: true },
+            (err) => {
+                if (err) next(err);
+            }
+        );
+        if (!acceptRequest)
+            throw new Error('Friend Request could not be accepted');
+        const addFriend1 = await User.findByIdAndUpdate(
+            curUserID,
+            { $addToSet: { friends: reqUserID } },
+            { new: true },
+            (err) => {
+                if (err) next(err);
+            }
+        );
+        const addFriend2 = await User.findByIdAndUpdate(
+            reqUserID,
+            { $addToSet: { friends: curUserID } },
+            { new: true },
+            (err) => {
+                if (err) next(err);
+            }
+        );
+        if (!addFriend1 || !addFriend2)
+            throw new Error('Friend could not be added');
+        res.status(200).json({ acceptRequest, addFriend1, addFriend2 });
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.deny_request = async (req, res, next) => {
+    try {
+        const { curUserID, reqUserID } = req.body;
+        const denyRequest = await User.findByIdAndUpdate(
+            curUserID,
+            { $pull: { friendrequests: reqUserID } },
+            { new: true },
+            (err) => {
+                if (err) next(err);
+            }
+        );
+        if (!denyRequest) throw new Error('Friend Request could not denied');
+        res.status(200).json(denyRequest);
     } catch (err) {
         next(err);
     }
