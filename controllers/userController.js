@@ -3,7 +3,7 @@ const User = require('../models/user');
 exports.get_user = async (req, res, next) => {
     try {
         const foundUser = await User.findById(req.params.id)
-            // .populate('friends')
+            .populate('friends')
             .populate('friendrequests');
         // may have to change the reference in userSchema to user to make the above work
         if (!foundUser) throw new Error('No user Found');
