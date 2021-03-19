@@ -23,7 +23,10 @@ exports.get_users_posts = async (req, res, next) => {
         const posts = await Post.find({ author: req.params.id })
             .populate('author')
             .populate('likes')
-            .populate('comments');
+            .populate({
+                path: 'comments',
+                populate: { path: 'author' },
+            });
         if (!posts) throw new Error('No posts found');
         res.status(200).json(posts);
     } catch (err) {
