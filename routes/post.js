@@ -13,6 +13,6 @@ router.post('/post', postController.post_create);
 
 router.delete('/post/:id', postController.post_delete);
 
-router.get('/postsbyuser', postController.get_users_posts);
+router.get('/postsbyuser/:id', postController.get_users_posts);
 
 module.exports = router;
