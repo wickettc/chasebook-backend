@@ -15,4 +15,6 @@ router.delete('/post/:id', postController.post_delete);
 
 router.get('/postsbyuser/:id', postController.get_users_posts);
 
+router.get('/postsfromfriends/', postController.get_friends_posts);
+
 module.exports = router;

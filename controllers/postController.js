@@ -34,6 +34,23 @@ exports.get_users_posts = async (req, res, next) => {
     }
 };
 
+exports.get_friends_posts = async (req, res, next) => {
+    try {
+        const friendsPosts = await Post.find({ author: req.query.friendsArr })
+            .populate('author')
+            .populate('likes')
+            .populate({
+                path: 'comments',
+                populate: { path: 'author' },
+            });
+        if (!friendsPosts)
+            throw new Error('Could not find any posts from friends list');
+        res.status(200).json(friendsPosts);
+    } catch (err) {
+        next(err);
+    }
+};
+
 // single
 exports.post_get = async (req, res, next) => {
     try {
