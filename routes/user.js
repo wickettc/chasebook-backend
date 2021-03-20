@@ -10,4 +10,6 @@ router.put('/acceptrequest', userController.accept_request);
 
 router.put('/denyrequest', userController.deny_request);
 
+router.put('/removefriend', userController.remove_friend);
+
 module.exports = router;

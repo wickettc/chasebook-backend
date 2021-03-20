@@ -85,3 +85,29 @@ exports.deny_request = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.remove_friend = async (req, res, next) => {
+    try {
+        const { curUserID, reqUserID } = req.body;
+        const firstRemoval = await User.findByIdAndUpdate(
+            curUserID,
+            { $pull: { friends: reqUserID } },
+            { new: true },
+            (err) => {
+                if (err) next(err);
+            }
+        );
+        const secondRemoval = await User.findByIdAndUpdate(
+            reqUserID,
+            { $pull: { friends: curUserID } },
+            { new: true },
+            (err) => {
+                if (err) next(err);
+            }
+        );
+        if (!firstRemoval || !secondRemoval)
+            throw new Error('Friend could not be removed');
+    } catch (err) {
+        next(err);
+    }
+};
