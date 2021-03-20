@@ -107,6 +107,7 @@ exports.remove_friend = async (req, res, next) => {
         );
         if (!firstRemoval || !secondRemoval)
             throw new Error('Friend could not be removed');
+        res.status(200).json({ firstRemoval, secondRemoval });
     } catch (err) {
         next(err);
     }
