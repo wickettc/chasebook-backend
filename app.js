@@ -5,6 +5,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
+const compression = require('compression');
+const helmet = require('helmet');
 require('dotenv').config();
 
 require('./passport/passport');
@@ -17,7 +19,8 @@ const likeRouter = require('./routes/like');
 
 const app = express();
 
-const mongoDBUrl = `mongodb+srv://admin:${process.env.MONGOPW}@cluster0.ekyc8.mongodb.net/chasebook?retryWrites=true&w=majority`;
+const dev_db_url = `mongodb+srv://admin:${process.env.MONGOPW}@cluster0.ekyc8.mongodb.net/chasebook?retryWrites=true&w=majority`;
+const mongoDBUrl = process.env.MONGODB_URL || dev_db_url;
 mongoose.connect(mongoDBUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -26,6 +29,8 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(logger('dev'));
+app.use(compression());
+app.use(helmet());
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
