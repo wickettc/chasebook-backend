@@ -16,7 +16,8 @@ passport.use(
             User.findOne({ email: username }, (err, user) => {
                 if (err) return done(err);
                 // email does not exist
-                if (!user) return done(null, false, { msg: 'Incorrect Email' });
+                if (!user)
+                    return done(null, false, { emailError: 'Incorrect Email' });
                 // need to check if password is correct here
                 bcrypt.compare(password, user.password, (error, res) => {
                     if (res) {
@@ -24,7 +25,7 @@ passport.use(
                         return done(null, user);
                     }
                     // passwords do not match
-                    return done(null, false, { msg: 'Incorrect Password' });
+                    return done(null, false, { pwError: 'Incorrect Password' });
                 });
             });
         }

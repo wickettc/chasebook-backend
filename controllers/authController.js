@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 exports.login_post = (req, res, next) => {
     passport.authenticate('local', { session: false }, (err, user, info) => {
         if (err || !user) {
-            return res.status(400).json({ msg: 'something did not work' });
+            return res.status(400).json(info);
         }
         req.login(user, { session: false }, (error) => {
             if (error) res.send(error);
