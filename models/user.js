@@ -10,6 +10,7 @@ const userSchema = new Schema({
     date: { type: Date, default: Date.now },
     friends: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
     friendrequests: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+    isonline: { type: Boolean, default: false },
 });
 
 userSchema.virtual('fullname').get(() => {

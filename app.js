@@ -1,10 +1,15 @@
 const express = require('express');
+const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
 const compression = require('compression');
 const helmet = require('helmet');
 require('dotenv').config();
@@ -16,8 +21,6 @@ const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const commentRouter = require('./routes/comment');
 const likeRouter = require('./routes/like');
-
-const app = express();
 
 const dev_db_url = `mongodb+srv://admin:${process.env.MONGOPW}@cluster0.ekyc8.mongodb.net/chasebook?retryWrites=true&w=majority`;
 const mongoDBUrl = process.env.MONGODB_URL || dev_db_url;
@@ -47,6 +50,9 @@ app.use(
     commentRouter
 );
 app.use('/like', passport.authenticate('jwt', { session: false }), likeRouter);
+
+//socket.io
+io.on('connection', (socket) => {});
 
 // error handler
 app.use((err, req, res, next) => {
