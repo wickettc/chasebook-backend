@@ -6,15 +6,24 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
-const http = require('http');
-const server = http.createServer(app);
-const { Server } = require('socket.io');
-const io = new Server(server);
+// const httpServer = require('http').createServer();
 const compression = require('compression');
 const helmet = require('helmet');
-require('dotenv').config();
 
+require('dotenv').config();
 require('./passport/passport');
+
+// const io = require('socket.io')(httpServer, {
+//     cors: {
+//         origin: 'http://localhost:8080',
+//     },
+// });
+
+// io.on('connection', (socket) => {
+//     console.log('new client connected');
+//     socket.emit('connection', null);
+// });
+
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
@@ -50,9 +59,6 @@ app.use(
     commentRouter
 );
 app.use('/like', passport.authenticate('jwt', { session: false }), likeRouter);
-
-//socket.io
-io.on('connection', (socket) => {});
 
 // error handler
 app.use((err, req, res, next) => {
