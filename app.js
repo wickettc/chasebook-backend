@@ -6,23 +6,11 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
-// const httpServer = require('http').createServer();
 const compression = require('compression');
 const helmet = require('helmet');
 
 require('dotenv').config();
 require('./passport/passport');
-
-// const io = require('socket.io')(httpServer, {
-//     cors: {
-//         origin: 'http://localhost:8080',
-//     },
-// });
-
-// io.on('connection', (socket) => {
-//     console.log('new client connected');
-//     socket.emit('connection', null);
-// });
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
