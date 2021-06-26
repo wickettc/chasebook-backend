@@ -27,17 +27,15 @@ io.on('connection', function (socket) {
         userID: socket.id,
         username: socket.username,
     });
-    // console.log('A user connected');
-    // socket.on('login', (userID) => {
-    //     if (userID !== null) {
-    //         socketapi.connectedUsers[socket.id] = userID;
-    //         console.log(socketapi.connectedUsers);
-    //     }
-    // });
-
-    // socket.on('logout', () => {
-    //     delete socketapi.connectedUsers[socket.id];
-    // });
+    socket.on('private message', ({ content, to }) => {
+        socket.to(to).emit('private message', {
+            content,
+            from: socket.id,
+        });
+    });
+    socket.on('disconnect', () => {
+        socket.broadcast.emit('user disconnected', socket.id);
+    });
 });
 
 module.exports = socketapi;
